@@ -1,4 +1,4 @@
-# Aimerz Todo App
+# Aimerz Todo App - Full Stack
 
 A scalable todo list application built with Next.js, NextAuth, and MongoDB.
 
