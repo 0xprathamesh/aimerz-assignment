@@ -23,7 +23,7 @@ A scalable todo list application built with Next.js, NextAuth, and MongoDB.
 
 1. Clone the repository
 ```bash
-git clone <https://github.com/0xprathamesh/aimerz-assignment>
+git clone https://github.com/0xprathamesh/aimerz-assignment
 cd aimerz-assignment
 ```
 
@@ -39,7 +39,7 @@ cp .env.example .env.local
 
 4. Configure your `.env.local`:
 ```env
-MONGODB_URL=mongodb://localhost:27017/aimerz-todo
+MONGODB_URL=
 NEXTAUTH_SECRET=your-super-secret-key-here
 NEXTAUTH_URL=http://localhost:3000
 ```
