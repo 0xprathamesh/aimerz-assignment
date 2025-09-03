@@ -5,7 +5,7 @@
   "installCommand": "npm ci",
   "devCommand": "npm run dev",
   "env": {
-    "MONGODB_URI": "@mongodb_url",
+    "MONGODB_URI": "@mongodb_uri",
     "NEXTAUTH_SECRET": "@nextauth_secret",
     "NEXTAUTH_URL": "@nextauth_url"
   },
