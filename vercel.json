@@ -6,8 +6,8 @@
   "devCommand": "npm run dev",
   "env": {
     "MONGODB_URI": "mongodb+srv://0x:0x@todo.eqs4szd.mongodb.net/?retryWrites=true&w=majority&appName=Todo",
-    "NEXTAUTH_SECRET": "@nextauth_secret",
-    "NEXTAUTH_URL": "@nextauth_url"
+    "NEXTAUTH_SECRET": "secrets",
+    "NEXTAUTH_URL": "https://aimerztodo.vercel.app"
   },
   "functions": {
     "app/api/**/*.ts": {
