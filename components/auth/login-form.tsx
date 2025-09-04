@@ -95,13 +95,12 @@ export default function LoginForm() {
       const result = await signIn("credentials", {
         email: formData.email,
         password: formData.password,
-        redirect: false,
+        callbackUrl: "/dashboard",
+        redirect: true,
       });
 
-      if (result?.error) {
+      if ((result as { error?: string })?.error) {
         setError("Invalid credentials. Please check your email and password.");
-      } else {
-        router.push("/dashboard");
       }
     } catch (error) {
       console.error("Login error:", error);

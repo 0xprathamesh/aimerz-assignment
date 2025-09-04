@@ -1,10 +1,10 @@
 import mongoose, { Mongoose } from "mongoose";
 
-const MONGODB_URI = "mongodb+srv://0x:0x@todo.eqs4szd.mongodb.net/?retryWrites=true&w=majority&appName=Todo";
+const MONGODB_URI = process.env.MONGODB_URI;
 
 if (!MONGODB_URI) {
   throw new Error(
-    "Please define the MONGODB_URL environment variable inside .env"
+    "Please define the MONGODB_URI environment variable in .env"
   );
 }
 
