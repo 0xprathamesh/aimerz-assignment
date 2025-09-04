@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { signIn } from "next-auth/react";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Eye, EyeOff, Loader2, AlertCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -37,7 +36,6 @@ export default function LoginForm() {
   const [error, setError] = useState<string>("");
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [fieldErrors, setFieldErrors] = useState<FieldErrors>({});
-  const router = useRouter();
 
   const validateField = (name: keyof FormData, value: string): FieldErrors => {
     const errors: FieldErrors = {};
