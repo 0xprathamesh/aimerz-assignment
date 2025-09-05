@@ -79,6 +79,7 @@ The repository includes a CI/CD pipeline that:
 - Lints and tests code
 - Builds Docker images
 - Deploys to Vercel automatically
+  
 
 ## Tech Stack
 
@@ -88,6 +89,6 @@ The repository includes a CI/CD pipeline that:
 - **Styling**: Tailwind CSS
 - **UI Components**: Shadcn/ui
 - **State Management**: Zustand
-- **Deployment**: Vercel + Docker
+- **Deployment**: Vercel + Docker + AWS EC2(comming soon)
 - **CI/CD**: GitHub Actions
 
