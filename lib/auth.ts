@@ -3,6 +3,7 @@ import { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import connectDB from "./mongodb";
 import User from "@/models/User";
+import { getBuildEnv } from "./build-env";
 
 export const authOptions: NextAuthOptions = {
   providers: [
@@ -72,5 +73,5 @@ export const authOptions: NextAuthOptions = {
   pages: {
     signIn: "/auth/login",
   },
-  secret: process.env.NEXTAUTH_SECRET,
+  secret: getBuildEnv().NEXTAUTH_SECRET,
 };
