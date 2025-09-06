@@ -183,7 +183,7 @@ jobs:
               default_type  application/octet-stream;
 
               upstream nextjs_app {
-                  server 127.0.0.1:3000;
+                  server aimerz-app:3000;
               }
 
               server {
@@ -229,13 +229,17 @@ jobs:
           # Wait a moment for ports to be released
           sleep 2
 
+          # Create Docker network
+          echo "🌐 Creating Docker network..."
+          docker network create aimerz-network || true
+
           # Start application container
           echo "🚀 Starting application..."
-          docker run -d --name aimerz-app -p 3000:3000 --env-file .env 0xprathameshdoteth/aimerz-assignment:ec2
+          docker run -d --name aimerz-app --network aimerz-network -p 3000:3000 --env-file .env 0xprathameshdoteth/aimerz-assignment:ec2
 
           # Start nginx container
           echo "🚀 Starting nginx..."
-          docker run -d --name nginx -p 80:80 -v $(pwd)/nginx.conf:/etc/nginx/nginx.conf:ro nginx:alpine
+          docker run -d --name nginx --network aimerz-network -p 80:80 -v $(pwd)/nginx.conf:/etc/nginx/nginx.conf:ro nginx:alpine
 
           # Wait for services to be ready
           echo "⏳ Waiting for services to start..."
