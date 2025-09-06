@@ -3,7 +3,11 @@ import mongoose, { Mongoose } from "mongoose";
 const MONGODB_URI = process.env.MONGODB_URI;
 
 if (!MONGODB_URI) {
-  console.warn("MONGODB_URI not defined, database connection will be skipped");
+  if (process.env.NODE_ENV === "production") {
+    console.warn(
+      "MONGODB_URI not defined, database connection will be skipped"
+    );
+  }
 }
 
 declare global {
