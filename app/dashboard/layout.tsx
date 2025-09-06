@@ -3,6 +3,7 @@ import { authOptions } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import DashboardLayout from "@/components/dashboard/dashboard-layout";
 import { Navbar } from "@/components/dashboard/navbar";
+import BackgroundWrapper from "@/components/dashboard/background-wrapper";
 
 export default async function Layout({
   children,
@@ -18,7 +19,9 @@ export default async function Layout({
   return (
     <DashboardLayout>
       <Navbar title="Dashboard" />
-      <div className="p-6">{children}</div>
+      <BackgroundWrapper>
+        <div className="pt-16 p-6">{children}</div>
+      </BackgroundWrapper>
     </DashboardLayout>
   );
 }

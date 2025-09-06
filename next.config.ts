@@ -1,12 +1,10 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  output: 'standalone',
-  experimental: {
-    serverComponentsExternalPackages: ['mongoose'],
-  },
+  output: "standalone",
+  serverExternalPackages: ["mongoose"],
   images: {
-    domains: ['localhost'],
+    domains: ["localhost"],
   },
 };
 

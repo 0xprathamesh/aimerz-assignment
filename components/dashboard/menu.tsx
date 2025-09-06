@@ -24,7 +24,7 @@ interface MenuProps {
 
 export function Menu({ isOpen }: MenuProps) {
   const pathname = usePathname();
-  const menuList = getMenuList(pathname, "user");
+  const menuList = getMenuList(pathname);
 
   const handleSignOut = async () => {
     await signOut({ callbackUrl: "/auth/login" });

@@ -25,10 +25,7 @@ interface MenuGroup {
   menus: MenuItem[];
 }
 
-export function getMenuList(
-  pathname: string,
-  _userType: string = "user"
-): MenuGroup[] {
+export function getMenuList(pathname: string): MenuGroup[] {
   const isActive = (href: string) => pathname === href;
 
   return [
@@ -48,56 +45,22 @@ export function getMenuList(
           active: isActive("/dashboard/todos"),
         },
         {
-          href: "/dashboard/todos/create",
-          label: "Create Todo",
-          icon: Plus,
-          active: isActive("/dashboard/todos/create"),
-        },
-      ],
-    },
-    {
-      groupLabel: "Organization",
-      menus: [
-        {
-          href: "/dashboard/calendar",
-          label: "Calendar",
-          icon: Calendar,
-          active: isActive("/dashboard/calendar"),
-        },
-        {
-          href: "/dashboard/analytics",
-          label: "Analytics",
-          icon: BarChart3,
-          active: isActive("/dashboard/analytics"),
-        },
-        {
-          href: "/dashboard/team",
-          label: "Team",
-          icon: Users,
-          active: isActive("/dashboard/team"),
+          href: "/dashboard/notes",
+          label: "Notes",
+          icon: FileText,
+          active: isActive("/dashboard/notes"),
         },
       ],
     },
     {
       groupLabel: "Tools",
       menus: [
+
         {
-          href: "/dashboard/categories",
-          label: "Categories",
-          icon: Filter,
-          active: isActive("/dashboard/categories"),
-        },
-        {
-          href: "/dashboard/archive",
-          label: "Archive",
-          icon: Archive,
-          active: isActive("/dashboard/archive"),
-        },
-        {
-          href: "/dashboard/notes",
-          label: "Notes",
-          icon: FileText,
-          active: isActive("/dashboard/notes"),
+          href: "/dashboard/analytics",
+          label: "Analytics",
+          icon: BarChart3,
+          active: isActive("/dashboard/analytics"),
         },
       ],
     },

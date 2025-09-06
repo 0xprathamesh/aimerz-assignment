@@ -1,12 +1,16 @@
 "use client";
 
-import { Badge } from "@/components/ui/badge";
+import { Button } from "./ui/button";
 
 export default function BackendStatus() {
   return (
-    <Badge variant="outline" className="text-xs px-2 py-1">
-      <div className="w-2 h-2 bg-green-500 rounded-full mr-2"></div>
+    <Button
+    variant="outline"
+    size="sm"
+    className="hidden sm:flex items-center gap-2"
+  >
+      <div className="w-2 h-2 bg-green-500 rounded-full mr-2" />
       Online
-    </Badge>
+    </Button>
   );
 }

@@ -2,13 +2,10 @@
 
 import { Sidebar } from "@/components/dashboard/sidebar";
 import { useSidebar } from "@/lib/hooks/use-sidebar";
+import { SidebarProvider } from "@/lib/hooks/use-sidebar";
 import { cn } from "@/lib/utils";
 
-export default function DashboardLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+function DashboardContent({ children }: { children: React.ReactNode }) {
   const sidebar = useSidebar();
   const { getOpenState, settings } = sidebar;
 
@@ -24,5 +21,17 @@ export default function DashboardLayout({
         {children}
       </main>
     </>
+  );
+}
+
+export default function DashboardLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return (
+    <SidebarProvider>
+      <DashboardContent>{children}</DashboardContent>
+    </SidebarProvider>
   );
 }
