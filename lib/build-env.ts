@@ -6,13 +6,13 @@ export const getBuildEnv = () => {
     return {
       MONGODB_URI: "",
       NEXTAUTH_SECRET: "build-time-secret",
-      NEXTAUTH_URL: "https://aimerztodo.vercel.app",
+      NEXTAUTH_URL: "http://localhost:3000",
     };
   }
 
   return {
     MONGODB_URI: process.env.MONGODB_URI || "",
     NEXTAUTH_SECRET: process.env.NEXTAUTH_SECRET || "",
-    NEXTAUTH_URL: process.env.NEXTAUTH_URL || "https://aimerztodo.vercel.app",
+    NEXTAUTH_URL: process.env.NEXTAUTH_URL || "http://localhost:3000",
   };
 };
