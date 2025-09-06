@@ -1,0 +1,75 @@
+name: Deploy to EC2
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+env:
+  EC2_HOST: 13.61.100.30
+  EC2_USER: ec2-user
+  SSH_KEY: ${{ secrets.EC2_SSH_KEY }}
+  APP_DIR: /home/ec2-user/aimerz-todo-app
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.EC2_SSH_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -H ${{ env.EC2_HOST }} >> ~/.ssh/known_hosts
+
+      - name: Deploy to EC2
+        run: |
+          ssh -i ~/.ssh/id_rsa ${{ env.EC2_USER }}@${{ env.EC2_HOST }} << 'EOF'
+          set -e
+
+          echo "🚀 Starting deployment on EC2..."
+
+          # Navigate to app directory
+          cd ${{ env.APP_DIR }}
+
+          # Pull latest Docker image
+          echo "📦 Pulling latest Docker image..."
+          docker pull 0xprathameshdoteth/aimerz-assignment:ec2
+
+          # Stop current services
+          echo "⏹️ Stopping current services..."
+          docker-compose down || true
+
+          # Start services with new image
+          echo "🚀 Starting services..."
+          docker-compose up -d
+
+          # Wait for services to be ready
+          echo "⏳ Waiting for services to start..."
+          sleep 30
+
+          # Health check
+          if curl -f http://localhost:3000/api/health > /dev/null 2>&1; then
+            echo "✅ Deployment successful!"
+            echo "🌐 Application is running at http://$(curl -s ifconfig.me)"
+          else
+            echo "❌ Deployment failed!"
+            docker-compose logs
+            exit 1
+          fi
+          EOF
+
+      - name: Notify deployment status
+        if: always()
+        run: |
+          if [ ${{ job.status }} == 'success' ]; then
+            echo "✅ Deployment to EC2 completed successfully!"
+            echo "🌐 Application is available at: http://${{ env.EC2_HOST }}"
+          else
+            echo "❌ Deployment to EC2 failed!"
+          fi

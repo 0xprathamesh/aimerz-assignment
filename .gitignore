@@ -127,3 +127,8 @@ temp/
 .env.development.local
 .env.test.local
 .env.production.local
+
+# SSH Keys (keep local only)
+github_ec2_key
+github_ec2_key.pub
+*.pem

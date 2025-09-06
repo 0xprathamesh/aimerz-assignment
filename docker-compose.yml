@@ -1,11 +1,8 @@
+version: "3.8"
+
 services:
   app:
-    build:
-      context: .
-      args:
-        - MONGODB_URI=${MONGODB_URI}
-        - NEXTAUTH_SECRET=${NEXTAUTH_SECRET}
-        - NEXTAUTH_URL=${NEXTAUTH_URL}
+    image: 0xprathameshdoteth/aimerz-assignment:ec2
     ports:
       - "3000:3000"
     environment:
@@ -13,20 +10,22 @@ services:
       - MONGODB_URI=${MONGODB_URI}
       - NEXTAUTH_SECRET=${NEXTAUTH_SECRET}
       - NEXTAUTH_URL=${NEXTAUTH_URL}
-    depends_on:
-      - mongodb
     restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
 
-  mongodb:
-    image: mongo:7.0
+  nginx:
+    image: nginx:alpine
     ports:
-      - "27017:27017"
-    environment:
-      - MONGO_INITDB_ROOT_USERNAME=${MONGO_USERNAME:-admin}
-      - MONGO_INITDB_ROOT_PASSWORD=${MONGO_PASSWORD:-password}
+      - "80:80"
+      - "443:443"
     volumes:
-      - mongodb_data:/data/db
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./ssl:/etc/ssl:ro
+    depends_on:
+      - app
     restart: unless-stopped
-
-volumes:
-  mongodb_data:

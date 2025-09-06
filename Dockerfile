@@ -11,12 +11,12 @@ WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
-# Accept build args
+
 ARG MONGODB_URI
 ARG NEXTAUTH_SECRET
 ARG NEXTAUTH_URL
 
-# Expose them as env vars for Next.js build
+
 ENV MONGODB_URI=$MONGODB_URI
 ENV NEXTAUTH_SECRET=$NEXTAUTH_SECRET
 ENV NEXTAUTH_URL=$NEXTAUTH_URL

@@ -15,6 +15,7 @@ import {
   CheckSquare,
   Eye,
   EyeOff,
+  Pin,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -41,6 +42,7 @@ import { useTodoStore } from "@/lib/stores/todo-store";
 import { toast } from "sonner";
 import { Todo } from "@/types/todo";
 import { cn } from "@/lib/utils";
+import PinToNotesButton from "./pin-to-notes-button";
 import FiltersModal from "./filters-modal";
 
 const CATEGORY_COLORS = {
@@ -480,6 +482,50 @@ export default function ListView({
                         >
                           <Edit className="mr-2 h-3 w-3" />
                           Edit
+                        </DropdownMenuItem>
+                        <DropdownMenuItem
+                          onClick={async () => {
+                            try {
+                              const response = await fetch("/api/notes", {
+                                method: "POST",
+                                headers: {
+                                  "Content-Type": "application/json",
+                                },
+                                body: JSON.stringify({
+                                  title: `Note for: ${todo.title}`,
+                                  content: `Task: ${
+                                    todo.title
+                                  }\n\nDescription: ${
+                                    todo.description
+                                  }\n\nStatus: ${todo.status}\n\nPriority: ${
+                                    todo.priority
+                                  }\n\nDue: ${new Date(
+                                    todo.endDate
+                                  ).toLocaleDateString()}`,
+                                  category: todo.category,
+                                  priority: todo.priority,
+                                  isPinned: true,
+                                  todoId: todo._id,
+                                  tags: ["todo", "pinned"],
+                                }),
+                              });
+
+                              if (!response.ok) {
+                                throw new Error("Failed to create note");
+                              }
+
+                              const { note } = await response.json();
+                              // You might want to add this to a note store if you have one
+                              toast.success("Todo pinned to notes");
+                            } catch (error) {
+                              console.error("Error creating note:", error);
+                              toast.error("Failed to pin todo to notes");
+                            }
+                          }}
+                          className="cursor-pointer text-xs"
+                        >
+                          <Pin className="mr-2 h-3 w-3" />
+                          Pin to Notes
                         </DropdownMenuItem>
                         <DropdownMenuItem
                           onClick={() => handleToggleStatus(todo)}

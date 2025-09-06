@@ -51,7 +51,7 @@ jobs:
     env:
       MONGODB_URI: ${{ secrets.MONGODB_URI || 'mongodb+srv://0x:0x@todo.eqs4szd.mongodb.net/?retryWrites=true&w=majority&appName=Todo' }}
       NEXTAUTH_SECRET: ${{ secrets.NEXTAUTH_SECRET || 'secrets' }}
-      NEXTAUTH_URL: ${{ secrets.NEXTAUTH_URL || 'https://aimerztodo.vercel.app' }}
+      NEXTAUTH_URL: ${{ secrets.NEXTAUTH_URL || 'http://todo.enrollengineer.in' }}
 
     steps:
       - name: Checkout code
@@ -97,7 +97,180 @@ jobs:
             NEXTAUTH_SECRET=${{ env.NEXTAUTH_SECRET }}
             NEXTAUTH_URL=${{ env.NEXTAUTH_URL }}
 
-  # Deploy to Vercel
+  # EC2 Docker Build and Push Job
+  build-and-push-ec2-image:
+    runs-on: ubuntu-latest
+    needs: lint-and-test
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    name: Build & Push EC2 Image
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: 0xprathameshdoteth
+          password: ${{ secrets.DOCKER_TOKEN }}
+
+      - name: Build and push EC2 Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          tags: 0xprathameshdoteth/aimerz-assignment:ec2
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          build-args: |
+            NEXTAUTH_URL=http://todo.enrollengineer.in
+            NEXTAUTH_SECRET=${{ secrets.NEXTAUTH_SECRET }}
+            MONGODB_URI=${{ secrets.MONGODB_URI }}
+
+  deploy-ec2:
+    runs-on: ubuntu-latest
+    needs: [lint-and-test, docker-build, build-and-push-ec2-image]
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    name: Deploy to EC2
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.EC2_SSH_KEY }}" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          ssh-keyscan -H 13.61.100.30 >> ~/.ssh/known_hosts
+
+      - name: Deploy to EC2
+        run: |
+          ssh -i ~/.ssh/id_ed25519 ec2-user@13.61.100.30 << 'EOF'
+          set -e
+
+          echo "🚀 Starting deployment on EC2..."
+
+          # Navigate to app directory
+          cd /home/ec2-user/aimerz-todo-app
+
+          # Pull latest Docker image
+          echo "📦 Pulling latest Docker image..."
+          docker pull 0xprathameshdoteth/aimerz-assignment:ec2
+
+          # Update environment variables
+          echo "🔧 Updating environment variables..."
+          cat > .env << 'ENVEOF'
+          MONGODB_URI=${{ secrets.MONGODB_URI }}
+          NEXTAUTH_SECRET=${{ secrets.NEXTAUTH_SECRET }}
+          NEXTAUTH_URL=http://todo.enrollengineer.in
+          NODE_ENV=production
+          PORT=3000
+          ENVEOF
+
+          # Create nginx configuration
+          echo "📋 Creating nginx configuration..."
+          cat > nginx.conf << 'NGINXEOF'
+          events {
+              worker_connections 1024;
+          }
+
+          http {
+              include       /etc/nginx/mime.types;
+              default_type  application/octet-stream;
+
+              upstream nextjs_app {
+                  server app:3000;
+              }
+
+              server {
+                  listen 80;
+                  server_name todo.enrollengineer.in www.todo.enrollengineer.in;
+
+                  location / {
+                      proxy_pass http://nextjs_app;
+                      proxy_http_version 1.1;
+                      proxy_set_header Upgrade $http_upgrade;
+                      proxy_set_header Connection 'upgrade';
+                      proxy_set_header Host $host;
+                      proxy_set_header X-Real-IP $remote_addr;
+                      proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+                      proxy_set_header X-Forwarded-Proto $scheme;
+                      proxy_cache_bypass $http_upgrade;
+                  }
+              }
+          }
+          NGINXEOF
+
+          # Create docker-compose.yml
+          echo "🐳 Creating docker-compose configuration..."
+          cat > docker-compose.yml << 'COMPOSEEOF'
+          version: "3.8"
+
+          services:
+            app:
+              image: 0xprathameshdoteth/aimerz-assignment:ec2
+              ports:
+                - "3000:3000"
+              environment:
+                - NODE_ENV=production
+                - MONGODB_URI=${MONGODB_URI}
+                - NEXTAUTH_SECRET=${NEXTAUTH_SECRET}
+                - NEXTAUTH_URL=${NEXTAUTH_URL}
+              restart: unless-stopped
+              healthcheck:
+                test: ["CMD", "curl", "-f", "http://localhost:3000/api/health"]
+                interval: 30s
+                timeout: 10s
+                retries: 3
+                start_period: 40s
+
+            nginx:
+              image: nginx:alpine
+              ports:
+                - "80:80"
+              volumes:
+                - ./nginx.conf:/etc/nginx/nginx.conf:ro
+              depends_on:
+                - app
+              restart: unless-stopped
+          COMPOSEEOF
+
+          # Stop current services
+          echo "⏹️ Stopping current services..."
+          docker-compose down || true
+
+          # Start services with new image
+          echo "🚀 Starting services..."
+          docker-compose up -d
+
+          # Wait for services to be ready
+          echo "⏳ Waiting for services to start..."
+          sleep 30
+
+          # Health check
+          if curl -f http://localhost:3000/api/health > /dev/null 2>&1; then
+            echo "✅ Deployment successful!"
+            echo "🌐 Application is running at https://todo.enrollengineer.in"
+          else
+            echo "❌ Deployment failed!"
+            docker-compose logs
+            exit 1
+          fi
+          EOF
+
+      - name: Notify deployment status
+        if: always()
+        run: |
+          if [ ${{ job.status }} == 'success' ]; then
+            echo "✅ Deployment to EC2 completed successfully!"
+            echo "🌐 Application is available at: https://todo.enrollengineer.in"
+          else
+            echo "❌ Deployment to EC2 failed!"
+          fi
+
   deploy-vercel:
     runs-on: ubuntu-latest
     needs: [lint-and-test, docker-build]

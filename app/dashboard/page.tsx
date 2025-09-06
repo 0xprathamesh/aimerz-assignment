@@ -144,8 +144,8 @@ export default async function DashboardPage() {
               Get started with your todo management
             </CardDescription>
           </CardHeader>
-          <CardContent className="space-y-4">
-            <Link href="/dashboard/todos/create">
+          <CardContent className="space-y-4 gap-4">
+            <Link href="/dashboard/todos">
               <Button className="w-full justify-start gap-2">
                 <Plus className="h-4 w-4" />
                 Create New Todo
