@@ -6,6 +6,16 @@ const nextConfig: NextConfig = {
   images: {
     domains: ["localhost"],
   },
+  skipTrailingSlashRedirect: true,
+  generateBuildId: async () => {
+    return "build-" + Date.now();
+  },
+  typescript: {
+    ignoreBuildErrors: false,
+  },
+  eslint: {
+    ignoreDuringBuilds: false,
+  },
 };
 
 export default nextConfig;
