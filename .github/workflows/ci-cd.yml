@@ -144,7 +144,9 @@ jobs:
           mkdir -p ~/.ssh
           echo "${{ secrets.EC2_SSH_KEY }}" > ~/.ssh/id_ed25519
           chmod 600 ~/.ssh/id_ed25519
+          chmod 700 ~/.ssh
           ssh-keyscan -H 13.61.100.30 >> ~/.ssh/known_hosts
+          ssh-add ~/.ssh/id_ed25519
 
       - name: Deploy to EC2
         run: |
@@ -182,7 +184,7 @@ jobs:
               default_type  application/octet-stream;
 
               upstream nextjs_app {
-                  server app:3000;
+                  server 127.0.0.1:3000;
               }
 
               server {
@@ -200,63 +202,48 @@ jobs:
                       proxy_set_header X-Forwarded-Proto $scheme;
                       proxy_cache_bypass $http_upgrade;
                   }
+
+                  # Health check endpoint
+                  location /api/health {
+                      proxy_pass http://nextjs_app;
+                      proxy_http_version 1.1;
+                      proxy_set_header Host $host;
+                      proxy_set_header X-Real-IP $remote_addr;
+                      proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+                      proxy_set_header X-Forwarded-Proto $scheme;
+                      access_log off;
+                  }
               }
           }
           NGINXEOF
 
-          # Create docker-compose.yml
-          echo "🐳 Creating docker-compose configuration..."
-          cat > docker-compose.yml << 'COMPOSEEOF'
-          version: "3.8"
-
-          services:
-            app:
-              image: 0xprathameshdoteth/aimerz-assignment:ec2
-              ports:
-                - "3000:3000"
-              environment:
-                - NODE_ENV=production
-                - MONGODB_URI=${MONGODB_URI}
-                - NEXTAUTH_SECRET=${NEXTAUTH_SECRET}
-                - NEXTAUTH_URL=${NEXTAUTH_URL}
-              restart: unless-stopped
-              healthcheck:
-                test: ["CMD", "curl", "-f", "http://localhost:3000/api/health"]
-                interval: 30s
-                timeout: 10s
-                retries: 3
-                start_period: 40s
-
-            nginx:
-              image: nginx:alpine
-              ports:
-                - "80:80"
-              volumes:
-                - ./nginx.conf:/etc/nginx/nginx.conf:ro
-              depends_on:
-                - app
-              restart: unless-stopped
-          COMPOSEEOF
-
           # Stop current services
           echo "⏹️ Stopping current services..."
-          docker-compose down || true
+          docker stop aimerz-app nginx || true
+          docker rm aimerz-app nginx || true
 
-          # Start services with new image
-          echo "🚀 Starting services..."
-          docker-compose up -d
+          # Start application container
+          echo "🚀 Starting application..."
+          docker run -d --name aimerz-app -p 3000:3000 --env-file .env 0xprathameshdoteth/aimerz-assignment:ec2
+
+          # Start nginx container
+          echo "🚀 Starting nginx..."
+          docker run -d --name nginx -p 80:80 -v $(pwd)/nginx.conf:/etc/nginx/nginx.conf:ro nginx:alpine
 
           # Wait for services to be ready
           echo "⏳ Waiting for services to start..."
           sleep 30
 
           # Health check
-          if curl -f http://localhost:3000/api/health > /dev/null 2>&1; then
+          if curl -f http://localhost/api/health > /dev/null 2>&1; then
             echo "✅ Deployment successful!"
-            echo "🌐 Application is running at https://todo.enrollengineer.in"
+            echo "🌐 Application is running at http://todo.enrollengineer.in"
           else
             echo "❌ Deployment failed!"
-            docker-compose logs
+            echo "Application logs:"
+            docker logs aimerz-app
+            echo "Nginx logs:"
+            docker logs nginx
             exit 1
           fi
           EOF
@@ -266,7 +253,7 @@ jobs:
         run: |
           if [ ${{ job.status }} == 'success' ]; then
             echo "✅ Deployment to EC2 completed successfully!"
-            echo "🌐 Application is available at: https://todo.enrollengineer.in"
+            echo "🌐 Application is available at: http://todo.enrollengineer.in"
           else
             echo "❌ Deployment to EC2 failed!"
           fi
