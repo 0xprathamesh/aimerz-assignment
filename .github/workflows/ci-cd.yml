@@ -38,9 +38,9 @@ jobs:
       - name: Build application
         run: npm run build
         env:
-          MONGODB_URI: ${{ secrets.MONGODB_URI }}
-          NEXTAUTH_SECRET: ${{ secrets.NEXTAUTH_SECRET}}
-          NEXTAUTH_URL: ${{ secrets.NEXTAUTH_URL }}
+          MONGODB_URI: ${{ secrets.MONGODB_URI || 'mongodb://localhost:27017/test' }}
+          NEXTAUTH_SECRET: ${{ secrets.NEXTAUTH_SECRET || 'build-test-secret' }}
+          NEXTAUTH_URL: ${{ secrets.NEXTAUTH_URL || 'http://localhost:3000' }}
 
   # Docker Build and Push Job
   docker-build:
@@ -83,9 +83,9 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
           build-args: |
-            MONGODB_URI: ${{ secrets.MONGODB_URI }}
-            NEXTAUTH_SECRET: ${{ secrets.NEXTAUTH_SECRET }}
-            NEXTAUTH_URL: ${{ secrets.NEXTAUTH_URL }}
+            MONGODB_URI: ${{ secrets.MONGODB_URI || 'mongodb://localhost:27017/test' }}
+            NEXTAUTH_SECRET: ${{ secrets.NEXTAUTH_SECRET || 'build-test-secret' }}
+            NEXTAUTH_URL: ${{ secrets.NEXTAUTH_URL || 'http://localhost:3000' }}
 
   # Deploy to Vercel
   deploy-vercel:
