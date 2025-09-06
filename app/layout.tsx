@@ -7,6 +7,7 @@ import { Toaster } from "@/components/ui/sonner";
 const poppins = Poppins({
   variable: "--font-poppins",
   weight: ["400", "500", "600", "700"],
+  subsets: ["latin"],
 });
 
 const inter = Inter({

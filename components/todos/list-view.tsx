@@ -274,7 +274,7 @@ export default function ListView({
             value={filters.search}
             onChange={(e) => handleSearch(e.target.value)}
             onKeyDown={handleKeyDown}
-            className="pl-10 h-9 dark:bg-accent bg-background"
+            className="pl-10 h-10 dark:bg-accent bg-background"
             aria-label="Search todos"
           />
         </div>
@@ -283,7 +283,7 @@ export default function ListView({
             variant="outline"
             size="sm"
             onClick={() => setShowDescription(!showDescription)}
-            className="flex items-center gap-2 h-9 px-3 dark:bg-accent bg-background font-normal"
+            className="flex items-center gap-2 h-10 px-4 dark:bg-accent bg-background font-normal"
           >
             {showDescription ? (
               <EyeOff className="h-4 w-4" />
