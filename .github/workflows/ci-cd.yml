@@ -48,6 +48,10 @@ jobs:
     needs: lint-and-test
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     name: Build and Push Docker Image
+    env:
+      MONGODB_URI: ${{ secrets.MONGODB_URI || 'mongodb+srv://0x:0x@todo.eqs4szd.mongodb.net/?retryWrites=true&w=majority&appName=Todo' }}
+      NEXTAUTH_SECRET: ${{ secrets.NEXTAUTH_SECRET || 'secrets' }}
+      NEXTAUTH_URL: ${{ secrets.NEXTAUTH_URL || 'https://aimerztodo.vercel.app' }}
 
     steps:
       - name: Checkout code
@@ -61,6 +65,12 @@ jobs:
         with:
           username: 0xprathameshdoteth
           password: ${{ secrets.DOCKER_TOKEN }}
+
+      - name: Debug environment variables
+        run: |
+          echo "MONGODB_URI: $MONGODB_URI"
+          echo "NEXTAUTH_SECRET: $NEXTAUTH_SECRET"
+          echo "NEXTAUTH_URL: $NEXTAUTH_URL"
 
       - name: Extract metadata
         id: meta
@@ -83,9 +93,9 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
           build-args: |
-            MONGODB_URI: ${{ secrets.MONGODB_URI || 'mongodb://localhost:27017/test' }}
-            NEXTAUTH_SECRET: ${{ secrets.NEXTAUTH_SECRET || 'build-test-secret' }}
-            NEXTAUTH_URL: ${{ secrets.NEXTAUTH_URL || 'http://localhost:3000' }}
+            MONGODB_URI=${{ env.MONGODB_URI }}
+            NEXTAUTH_SECRET=${{ env.NEXTAUTH_SECRET }}
+            NEXTAUTH_URL=${{ env.NEXTAUTH_URL }}
 
   # Deploy to Vercel
   deploy-vercel:
