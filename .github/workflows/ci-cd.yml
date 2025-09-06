@@ -221,6 +221,14 @@ jobs:
           docker stop aimerz-app nginx || true
           docker rm aimerz-app nginx || true
 
+          # Kill any process using port 80
+          echo "🔫 Killing processes on port 80..."
+          sudo fuser -k 80/tcp || true
+          sudo fuser -k 3000/tcp || true
+
+          # Wait a moment for ports to be released
+          sleep 2
+
           # Start application container
           echo "🚀 Starting application..."
           docker run -d --name aimerz-app -p 3000:3000 --env-file .env 0xprathameshdoteth/aimerz-assignment:ec2
