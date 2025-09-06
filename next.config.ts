@@ -16,6 +16,7 @@ const nextConfig: NextConfig = {
   eslint: {
     ignoreDuringBuilds: false,
   },
+  skipMiddlewareUrlNormalize: true,
 };
 
 export default nextConfig;
