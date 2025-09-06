@@ -1,6 +1,7 @@
 import mongoose, { Mongoose } from "mongoose";
+import { getBuildEnv } from "./build-env";
 
-const MONGODB_URI = process.env.MONGODB_URI;
+const MONGODB_URI = getBuildEnv().MONGODB_URI;
 
 if (!MONGODB_URI) {
   console.warn("MONGODB_URI not defined, database connection will be skipped");
@@ -26,9 +27,10 @@ if (!global.mongoose) {
 
 async function connectDB(): Promise<Mongoose> {
   if (!MONGODB_URI) {
-    throw new Error(
-      "MONGODB_URI is not defined. Please check your environment variables."
+    console.warn(
+      "MONGODB_URI not defined, database connection will be skipped"
     );
+    return {} as Mongoose;
   }
 
   if (cached.conn) {

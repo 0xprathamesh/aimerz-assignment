@@ -17,6 +17,7 @@ const nextConfig: NextConfig = {
     ignoreDuringBuilds: false,
   },
   skipMiddlewareUrlNormalize: true,
+  // Environment variables will be handled by the runtime environment
 };
 
 export default nextConfig;

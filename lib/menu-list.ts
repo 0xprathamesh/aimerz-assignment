@@ -1,15 +1,10 @@
 import React from "react";
 import {
   CheckSquare,
-  Calendar,
   BarChart3,
   Settings,
-  Users,
   FileText,
   Home,
-  Plus,
-  Filter,
-  Archive,
 } from "lucide-react";
 
 interface MenuItem {
