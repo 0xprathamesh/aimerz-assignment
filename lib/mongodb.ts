@@ -3,7 +3,14 @@ import mongoose, { Mongoose } from "mongoose";
 const MONGODB_URI = process.env.MONGODB_URI;
 
 if (!MONGODB_URI) {
-  throw new Error("Please define the MONGODB_URI environment variable in .env");
+  if (process.env.NODE_ENV === "production") {
+    throw new Error(
+      "Please define the MONGODB_URI environment variable in .env"
+    );
+  }
+  console.warn(
+    "MONGODB_URI not defined, skipping database connection during build"
+  );
 }
 
 declare global {
@@ -25,6 +32,10 @@ if (!global.mongoose) {
 }
 
 async function connectDB(): Promise<Mongoose> {
+  if (!MONGODB_URI) {
+    throw new Error("MONGODB_URI is not defined");
+  }
+
   if (cached.conn) {
     return cached.conn;
   }
@@ -34,7 +45,7 @@ async function connectDB(): Promise<Mongoose> {
       bufferCommands: false,
     };
 
-    cached.promise = mongoose.connect(MONGODB_URI!, opts).then((mongoose) => {
+    cached.promise = mongoose.connect(MONGODB_URI, opts).then((mongoose) => {
       return mongoose;
     });
   }
