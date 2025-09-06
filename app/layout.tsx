@@ -1,9 +1,8 @@
 import type { Metadata } from "next";
-import {  Poppins, Inter } from "next/font/google";
+import { Poppins, Inter } from "next/font/google";
 import "./globals.css";
-import { Providers } from "@/lib/providers/providers";
-
-
+import { ClientProviders } from "@/components/client-providers";
+import { Toaster } from "@/components/ui/sonner";
 
 const poppins = Poppins({
   variable: "--font-poppins",
@@ -27,10 +26,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body
-        className={`${poppins.variable} ${inter.variable} antialiased`}
-      >
-        <Providers>{children}</Providers>
+      <body className={`${poppins.variable} ${inter.variable} antialiased`}>
+        <ClientProviders>{children}</ClientProviders>
+        <Toaster />
       </body>
     </html>
   );

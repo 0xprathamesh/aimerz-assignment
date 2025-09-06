@@ -34,18 +34,19 @@ export function Sidebar() {
           variant="link"
           asChild
         >
-          <Link href="/dashboard" className="flex items-center gap-2">
+          <Link
+            href="/dashboard"
+            className="flex items-center gap-2"
+            aria-label="Aimerz Todo"
+          >
             <PanelsTopLeft className="w-6 h-6 mr-1" />
-            <h1
-              className={cn(
-                "font-bold text-lg whitespace-nowrap transition-[transform,opacity,display] ease-in-out duration-300",
-                !getOpenState()
-                  ? "-translate-x-96 opacity-0 hidden"
-                  : "translate-x-0 opacity-100"
-              )}
-            >
-              Aimerz Todo
-            </h1>
+            {getOpenState() ? (
+              <h1 className="font-bold text-lg whitespace-nowrap transition-[transform,opacity] ease-in-out duration-300 translate-x-0 opacity-100">
+                Aimerz Todo
+              </h1>
+            ) : (
+              <span className="text-sm font-semibold">Aimerz</span>
+            )}
           </Link>
         </Button>
         <Menu isOpen={getOpenState()} />

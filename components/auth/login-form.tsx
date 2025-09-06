@@ -111,15 +111,15 @@ export default function LoginForm() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 to-slate-100 p-4">
       <div className="w-full max-w-md">
-        <Card className="border-0 shadow-xl">
+        <Card className="border-0 shadow-xl bg-white dark:bg-gray-800">
           <CardHeader className="space-y-2 text-center pb-6">
-            <div className="mx-auto w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mb-2">
-              <div className="w-6 h-6 bg-primary rounded-full"></div>
+            <div className="mx-auto w-12 h-12 bg-blue-100 dark:bg-blue-900/20 rounded-full flex items-center justify-center mb-2">
+              <div className="w-6 h-6 bg-blue-600 dark:bg-blue-500 rounded-full"></div>
             </div>
-            <CardTitle className="text-2xl font-bold tracking-tight">
+            <CardTitle className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
               Welcome back
             </CardTitle>
-            <CardDescription className="text-base">
+            <CardDescription className="text-base text-gray-600 dark:text-gray-300">
               Sign in to your account
             </CardDescription>
           </CardHeader>
@@ -223,11 +223,11 @@ export default function LoginForm() {
           </CardContent>
 
           <CardFooter className="justify-center pt-2">
-            <div className="text-center text-sm text-muted-foreground">
+            <div className="text-center text-sm text-gray-600 dark:text-gray-300">
               Don&apos;t have an account?{" "}
               <Link
                 href="/auth/register"
-                className="font-medium text-primary hover:underline underline-offset-4"
+                className="font-medium text-blue-600 dark:text-blue-400 hover:underline underline-offset-4"
               >
                 Register here
               </Link>
@@ -235,7 +235,7 @@ export default function LoginForm() {
           </CardFooter>
         </Card>
 
-        <div className="mt-6 text-center text-xs text-muted-foreground">
+        <div className="mt-6 text-center text-xs text-gray-500 dark:text-gray-400">
           <Link href={"/"}>
             By signing in, you agree to our Terms of Service and Privacy Policy
           </Link>
