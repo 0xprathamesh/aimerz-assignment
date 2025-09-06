@@ -131,7 +131,7 @@ export default function NoteForm({ note, onClose, todoId }: NoteFormProps) {
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
-      <Card className="w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+      <Card className="w-full max-w-2xl max-h-[90vh] overflow-y-auto dark:bg-accent bg-background">
         <CardHeader className="flex flex-row items-center justify-between">
           <CardTitle>{note ? "Edit Note" : "Create New Note"}</CardTitle>
           <Button variant="ghost" size="sm" onClick={onClose}>
@@ -176,7 +176,7 @@ export default function NoteForm({ note, onClose, todoId }: NoteFormProps) {
                     setFormData({ ...formData, category: value })
                   }
                 >
-                  <SelectTrigger>
+                  <SelectTrigger className="dark:bg-accent bg-background">
                     <SelectValue placeholder="Select category" />
                   </SelectTrigger>
                   <SelectContent>
@@ -197,7 +197,7 @@ export default function NoteForm({ note, onClose, todoId }: NoteFormProps) {
                     setFormData({ ...formData, priority: value })
                   }
                 >
-                  <SelectTrigger>
+                  <SelectTrigger className="dark:bg-accent bg-background">
                     <SelectValue placeholder="Select priority" />
                   </SelectTrigger>
                   <SelectContent>
@@ -214,16 +214,20 @@ export default function NoteForm({ note, onClose, todoId }: NoteFormProps) {
             <div className="space-y-2">
               <Label htmlFor="todoId">Link to Todo (Optional)</Label>
               <Select
-                value={formData.todoId || ""}
+                value={formData.todoId || "none"}
                 onValueChange={(value) =>
-                  setFormData({ ...formData, todoId: value || undefined })
+                  setFormData({
+                    ...formData,
+                    todoId: value === "none" ? undefined : value,
+                  })
+                    
                 }
               >
-                <SelectTrigger>
+                <SelectTrigger className="dark:bg-accent bg-background">
                   <SelectValue placeholder="Select a todo to link" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">No todo linked</SelectItem>
+                  <SelectItem value="none">No todo linked</SelectItem>
                   {todos.map((todo) => (
                     <SelectItem key={todo._id} value={todo._id}>
                       {todo.title}

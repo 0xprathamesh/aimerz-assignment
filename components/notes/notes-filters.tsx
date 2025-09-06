@@ -125,7 +125,6 @@ export default function NotesFilters() {
           </DialogHeader>
 
           <div className="space-y-6">
-      
             <div className="space-y-2">
               <label className="text-sm font-medium">Pinned Status</label>
               <Select
@@ -149,7 +148,6 @@ export default function NotesFilters() {
               </Select>
             </div>
 
-   
             <div className="space-y-2">
               <label className="text-sm font-medium">Categories</label>
               <div className="grid grid-cols-2 gap-2">
@@ -269,7 +267,6 @@ export default function NotesFilters() {
               </div>
             )}
 
-      
             <div className="flex justify-between">
               <Button variant="outline" onClick={clearFilters}>
                 Clear All

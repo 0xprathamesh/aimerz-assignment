@@ -18,7 +18,7 @@ export default async function Layout({
 
   return (
     <DashboardLayout>
-      <Navbar title="Dashboard" />
+      <Navbar/>
       <BackgroundWrapper>
         <div className="pt-16 p-6">{children}</div>
       </BackgroundWrapper>

@@ -11,7 +11,7 @@ interface UiState {
 export const useUiStore = create<UiState>()(
   persist(
     (set) => ({
-      dashboardBackground: "none",
+      dashboardBackground: "dots",
       setDashboardBackground: (dashboardBackground) =>
         set({ dashboardBackground }),
     }),

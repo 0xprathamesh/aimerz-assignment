@@ -45,7 +45,7 @@ export function Sidebar() {
                 Aimerz Todo
               </h1>
             ) : (
-              <span className="text-sm font-semibold">Aimerz</span>
+              null
             )}
           </Link>
         </Button>

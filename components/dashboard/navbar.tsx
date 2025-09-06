@@ -15,7 +15,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 interface NavbarProps {
-  title: string;
+  title?: string;
 }
 type DashboardBg = "none" | "slate" | "zinc" | "gradient" | "dots";
 //  <header className="fixed top-0 inset-x-0 z-20 w-full bg-background/95 shadow backdrop-blur supports-[backdrop-filter]:bg-background/60 dark:shadow-secondary">
