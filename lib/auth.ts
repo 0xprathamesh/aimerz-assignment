@@ -74,4 +74,6 @@ export const authOptions: NextAuthOptions = {
     signIn: "/auth/login",
   },
   secret: getBuildEnv().NEXTAUTH_SECRET,
+
+  ...(getBuildEnv().NEXTAUTH_URL && { url: getBuildEnv().NEXTAUTH_URL }),
 };

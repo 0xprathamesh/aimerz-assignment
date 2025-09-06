@@ -1,11 +1,5 @@
 import React from "react";
-import {
-  CheckSquare,
-  BarChart3,
-  Settings,
-  FileText,
-  Home,
-} from "lucide-react";
+import { CheckSquare, BarChart3, Settings, FileText, Home } from "lucide-react";
 
 interface MenuItem {
   href: string;
@@ -50,7 +44,6 @@ export function getMenuList(pathname: string): MenuGroup[] {
     {
       groupLabel: "Tools",
       menus: [
-
         {
           href: "/dashboard/analytics",
           label: "Analytics",
