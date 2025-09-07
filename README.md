@@ -10,6 +10,7 @@ A scalable todo list application built with Next.js, NextAuth, and MongoDB.
 - 🐳 Docker support
 - 🚀 CI/CD pipeline with GitHub Actions
 - ⚡ Built with Next.js 15 and Turbopack
+- 🧪 Tested CONSTANTS,utils etc
 
 ## Getting Started
 
@@ -61,6 +62,21 @@ Open [http://localhost:3000](http://localhost:3000) to see the application.
 - `npm run docker:build` - Build Docker image
 - `npm run docker:dev` - Run with Docker Compose
 
+# Testing...
+This folder contains tests for the todo app.
+## Running Tests
+
+```bash
+npm test
+```
+
+## Test Files
+
+- `basic.test.ts` - Basic functionality tests
+- `utils.test.ts` - Utility function tests  
+- `constants.test.ts` - App constants validation
+- `integration.test.ts` - Data flow tests
+
 ## Deployment
 
 ### Vercel + AWS EC2
@@ -89,6 +105,6 @@ The repository includes a CI/CD pipeline that:
 - **Styling**: Tailwind CSS
 - **UI Components**: Shadcn/ui
 - **State Management**: Zustand
-- **Deployment**: Vercel + Docker + AWS EC2(comming soon)
+- **Deployment**: Vercel + Docker + AWS EC2
 - **CI/CD**: GitHub Actions
 

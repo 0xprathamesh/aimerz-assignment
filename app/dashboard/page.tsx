@@ -274,7 +274,7 @@ export default async function DashboardPage() {
               </div>
             ) : (
               <div className="space-y-3">
-                {/* Recent Todos */}
+        
                 {recentTodos.slice(0, 2).map((todo) => (
                   <div
                     key={`todo-${todo._id}`}
@@ -303,7 +303,7 @@ export default async function DashboardPage() {
                   </div>
                 ))}
 
-                {/* Recent Notes */}
+               
                 {recentNotes.slice(0, 2).map((note) => (
                   <div
                     key={`note-${note._id}`}

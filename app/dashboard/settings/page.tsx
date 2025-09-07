@@ -45,7 +45,7 @@ export default function SettingsPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
 
-  // Fetch user profile
+  
   useEffect(() => {
     const fetchProfile = async () => {
       if (status === "authenticated") {
@@ -244,7 +244,7 @@ export default function SettingsPage() {
         </Card>
       </div>
 
-      {/* Mobile Dashboard Background Customization */}
+    
       <Card className="lg:hidden">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">

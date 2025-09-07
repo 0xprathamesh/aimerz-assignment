@@ -6,9 +6,8 @@ import { ArrowLeft, Home, RefreshCw } from "lucide-react";
 
 export default function NotFound() {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
+    <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900 px-4">
       <div className="text-center">
-    
         <div className="relative mb-8">
           <h1 className="text-9xl font-bold text-primary animate-pulse">404</h1>
           <div className="absolute -top-4 -right-4 animate-spin-slow">
@@ -16,14 +15,14 @@ export default function NotFound() {
           </div>
         </div>
 
-  
-        <h2 className="text-3xl font-bold mb-4">Page Not Found</h2>
-        <p className="text-gray-600 mb-8 max-w-md mx-auto">
-          Oops! The page you&apos;re looking for seems to have vanished into thin
-          air. Let&apos;s get you back on track.
+        <h2 className="text-3xl font-bold mb-4 text-gray-900 dark:text-white">
+          Page Not Found
+        </h2>
+        <p className="text-gray-600 dark:text-gray-300 mb-8 max-w-md mx-auto">
+          Oops! The page you&apos;re looking for seems to have vanished into
+          thin air. Let&apos;s get you back on track.
         </p>
 
-  
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
           <Button variant="default" size="lg" className="group" asChild>
             <Link href="/">
@@ -42,12 +41,11 @@ export default function NotFound() {
           </Button>
         </div>
 
-  
         <div className="mt-16 relative">
           <div className="absolute -left-8 top-0 w-16 h-16 bg-primary/10 rounded-full blur-xl animate-pulse" />
           <div className="absolute -right-8 bottom-0 w-16 h-16 bg-secondary/10 rounded-full blur-xl animate-pulse delay-300" />
           <div className="relative z-10">
-            <p className="text-sm text-gray-500">
+            <p className="text-sm text-gray-500 dark:text-gray-400">
               Need help?{" "}
               <Link
                 href="mailto:0xprathamesh@gmail.com"
@@ -60,7 +58,6 @@ export default function NotFound() {
         </div>
       </div>
 
-    
       <style jsx global>{`
         @keyframes spin-slow {
           from {
@@ -80,4 +77,3 @@ export default function NotFound() {
     </div>
   );
 }
-
